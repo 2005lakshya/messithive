@@ -16,6 +16,7 @@ dependencies:
   hive_flutter: ^1.1.0
   crypto: ^3.0.3
   path_provider: ^2.1.2
+  table_calendar: ^3.0.9
 
 dev_dependencies:
   flutter_test:
@@ -31,8 +32,14 @@ flutter:
   uses-material-design: true
 
   assets:
-    - images/
     - assets/
+    - assets/breakfast.png
+    - assets/lunch.png
+    - assets/snacks.png
+    - assets/dinner.png
+    - assets/messitbg.png
+    - assets/data/
+    - assets/data/menu_data.json
 
 #  fonts:
 #    - family: PlusJakartaSans

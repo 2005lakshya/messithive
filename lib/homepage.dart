@@ -3,6 +3,9 @@ import 'services/hive_service.dart';
 import 'models/menu_card.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
+import 'dart:convert';
+import 'package:flutter/services.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class MealTimeCard extends StatefulWidget {
   final String title;
@@ -158,6 +161,15 @@ class _MealTimeCardState extends State<MealTimeCard> {
                     width: widget.imageWidth,
                     height: widget.imageHeight,
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      print('Error loading image: $error');
+                      return Container(
+                        width: widget.imageWidth,
+                        height: widget.imageHeight,
+                        color: Colors.grey[300],
+                        child: const Icon(Icons.error, color: Colors.red),
+                      );
+                    },
                   ),
                 ),
                 Positioned(
@@ -200,6 +212,83 @@ class _MyHomePageState extends State<MyHomePage> {
   String? selectedMessType = 'Special Mess';
   String? selectedMessType2 = 'Special Mess';
   final List<String> messTypes = ['Special Mess', 'Veg Mess', 'Non-Veg Mess'];
+  Map<String, dynamic>? menuData;
+  String currentDate = '2025-06-13'; // Default date
+
+  @override
+  void initState() {
+    super.initState();
+    _loadMenuData();
+  }
+
+  Future<void> _loadMenuData() async {
+    try {
+      // First try to get from Hive
+      final storedData = await HiveService.get('menu_data');
+      if (storedData != null) {
+        setState(() {
+          menuData = Map<String, dynamic>.from(storedData);
+        });
+        print('Loaded menu data from Hive storage');
+        print('Current date: $currentDate');
+        print('Available dates: ${menuData!.keys.toList()}');
+
+        // Verify we have data for the current date
+        if (!menuData!.containsKey(currentDate)) {
+          print('No menu data for current date, loading from JSON...');
+          await _loadFromJson();
+        }
+        return;
+      }
+
+      // If not in Hive, load from JSON
+      await _loadFromJson();
+    } catch (e) {
+      print('Error in _loadMenuData: $e');
+      setState(() {
+        menuData = null;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+                'Error loading menu data. Please check storage and try again.'),
+            duration: Duration(seconds: 5),
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _loadFromJson() async {
+    try {
+      final String jsonString =
+          await rootBundle.loadString('assets/data/menu_data.json');
+      final Map<String, dynamic> data = json.decode(jsonString);
+      setState(() {
+        menuData = data['menu'];
+      });
+      // Store in Hive for future use
+      await HiveService.put('menu_data', data['menu']);
+      print('Loaded menu data from JSON and stored in Hive');
+      print('Current date: $currentDate');
+      print('Available dates: ${menuData!.keys.toList()}');
+    } catch (e) {
+      print('Error loading JSON file: $e');
+      setState(() {
+        menuData = null;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content:
+                Text('No mess menu available. Please add menu_data.json file.'),
+            duration: Duration(seconds: 5),
+          ),
+        );
+      }
+    }
+  }
 
   // Define meal timings
   final Map<String, Map<String, dynamic>> mealTimings = {
@@ -208,28 +297,28 @@ class _MyHomePageState extends State<MyHomePage> {
       'end': const TimeOfDay(hour: 9, minute: 30),
       'food': 'Paneer Puffs',
       'beverages': 'Milk, Tea, Coffee',
-      'image': 'images/breakfast.png',
+      'image': 'assets/breakfast.png',
     },
     'Lunch': {
       'start': const TimeOfDay(hour: 12, minute: 30),
       'end': const TimeOfDay(hour: 14, minute: 30),
       'food': 'Paneer Puffs',
       'beverages': 'Milk, Tea, Coffee',
-      'image': 'images/lunch.png',
+      'image': 'assets/lunch.png',
     },
     'Snacks': {
       'start': const TimeOfDay(hour: 16, minute: 30),
       'end': const TimeOfDay(hour: 18, minute: 00),
       'food': 'Paneer Puffs',
       'beverages': 'Milk, Tea, Coffee',
-      'image': 'images/snacks.png',
+      'image': 'assets/snacks.png',
     },
     'Dinner': {
       'start': const TimeOfDay(hour: 19, minute: 30),
       'end': const TimeOfDay(hour: 21, minute: 0),
       'food': 'Paneer Puffs',
       'beverages': 'Milk, Tea, Coffee',
-      'image': 'images/dinner.png',
+      'image': 'assets/dinner.png',
     },
   };
 
@@ -320,7 +409,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('images/messitbg.png'),
+                image: AssetImage('assets/messitbg.png'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -372,7 +461,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                     SizedBox(width: 10),
                                     Text(
-                                      'Reset',
+                                      'Reset Storage',
                                       style: TextStyle(color: Colors.white),
                                     ),
                                   ],
@@ -411,6 +500,22 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                               PopupMenuItem<String>(
+                                value: 'check_storage',
+                                child: Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.folder_open,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      'Check Storage Contents',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              PopupMenuItem<String>(
                                 value: 'view_menu_data',
                                 child: Row(
                                   children: const [
@@ -426,10 +531,94 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ],
                                 ),
                               ),
+                              PopupMenuItem<String>(
+                                value: 'test_monthly',
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.timer, color: Colors.blue),
+                                    const SizedBox(width: 8),
+                                    const Text('Test Monthly Operations'),
+                                  ],
+                                ),
+                              ),
+                              PopupMenuItem<String>(
+                                value: 'test_performance',
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.speed,
+                                        color: Colors.green),
+                                    const SizedBox(width: 8),
+                                    const Text('Test Data Fetch Performance'),
+                                  ],
+                                ),
+                              ),
                             ],
                             onSelected: (String value) async {
                               if (value == 'reset') {
-                                // Handle reset option
+                                // Clear Hive storage
+                                await HiveService.clear();
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Storage cleared. Restart app to reload from JSON.'),
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                }
+                              } else if (value == 'test_performance') {
+                                // Show loading dialog
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (context) => const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                );
+
+                                // Run performance test
+                                await HiveService.testDataFetchPerformance();
+
+                                // Close loading dialog
+                                if (mounted) {
+                                  Navigator.pop(context);
+
+                                  // Show results dialog
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: const Text(
+                                          'Performance Test Results'),
+                                      content: SingleChildScrollView(
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: const [
+                                            Text(
+                                              'Check the console for detailed performance metrics.\n\n'
+                                              'The test measures:\n'
+                                              '1. Single menu card fetch time\n'
+                                              '2. All menu cards fetch time\n'
+                                              '3. Specific date menu fetch time\n'
+                                              '4. Monthly data fetch time\n'
+                                              '5. Complete fetch cycle time\n\n'
+                                              'Open the debug console to see the results.',
+                                              style: TextStyle(fontSize: 14),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          child: const Text('Close'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
                               } else if (value == 'favorite') {
                                 // Handle favorite option
                               } else if (value == 'storage') {
@@ -458,29 +647,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     TextDecoration.underline,
                                               ),
                                             ),
-                                            const SizedBox(height: 16),
-                                            const Text(
-                                                'Files in this directory:'),
-                                            const SizedBox(height: 8),
-                                            FutureBuilder<
-                                                List<FileSystemEntity>>(
-                                              future: appDir.list().toList(),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.hasData) {
-                                                  return Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: snapshot.data!
-                                                        .map((file) {
-                                                      return Text(
-                                                          '• ${file.path.split('/').last}');
-                                                    }).toList(),
-                                                  );
-                                                }
-                                                return const Text('Loading...');
-                                              },
-                                            ),
                                           ],
                                         ),
                                       ),
@@ -494,8 +660,36 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                   );
                                 }
+                              } else if (value == 'check_storage') {
+                                final location =
+                                    await HiveService.getStorageLocation();
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text('Storage Location'),
+                                    content: Text(location),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                                HiveService.checkStorage();
                               } else if (value == 'view_menu_data') {
                                 _checkSavedMenus();
+                              } else if (value == 'test_monthly') {
+                                await HiveService.testMonthlyOperations();
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Monthly operations test completed. Check console for timing details.'),
+                                      duration: Duration(seconds: 3),
+                                    ),
+                                  );
+                                }
                               }
                             },
                           ),
@@ -511,9 +705,23 @@ class _MyHomePageState extends State<MyHomePage> {
                           // Avatars
                           Row(
                             children: [
-                              _avatar('assets/avatar1.png'),
+                              Container(
+                                width: 44,
+                                height: 44,
+                                decoration: BoxDecoration(
+                                  color: Colors.yellow,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
                               const SizedBox(width: 10),
-                              _avatar('assets/avatar2.png'),
+                              Container(
+                                width: 44,
+                                height: 44,
+                                decoration: BoxDecoration(
+                                  color: Colors.yellow,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
                             ],
                           ),
                         ],
@@ -580,19 +788,48 @@ class _MyHomePageState extends State<MyHomePage> {
                         "Today's Menu for ",
                       ),
 
-                      // Today's Menu Cards
-                      ...mealTimings.entries.map(
-                        (entry) => MealTimeCard(
-                          title: entry.key,
-                          time: getTimeRange(entry.key),
-                          food: entry.value['food'] as String,
-                          beverages: entry.value['beverages'] as String,
-                          imagePath: entry.value['image'] as String,
-                          imageWidth: entry.key == 'Lunch' ? 120 : 150,
-                          imageHeight: entry.key == 'Lunch' ? 120 : 150,
-                          bottomOffset: entry.key == 'Dinner' ? -20 : 0,
+                      // Display selected date
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          'Menu for ${currentDate}',
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
+
+                      // Selected Date's Menu Cards
+                      if (menuData != null &&
+                          menuData!.containsKey(currentDate))
+                        ...menuData![currentDate].entries.map((entry) {
+                          final mealType = entry.key;
+                          final mealData = entry.value;
+                          return MealTimeCard(
+                            title: mealData['title'],
+                            time: mealData['time'],
+                            food: mealData['food'],
+                            beverages: mealData['beverages'],
+                            imagePath: mealData['imagePath'],
+                            imageWidth: mealType == 'lunch' ? 120 : 150,
+                            imageHeight: mealType == 'lunch' ? 120 : 150,
+                            bottomOffset: mealType == 'dinner' ? -20 : 0,
+                          );
+                        }).toList()
+                      else
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Text(
+                              'No menu available for selected date',
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -671,7 +908,119 @@ class _MyHomePageState extends State<MyHomePage> {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
+            const SizedBox(width: 8),
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.2),
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                padding: EdgeInsets.zero,
+                icon: const Icon(
+                  Icons.calendar_today,
+                  color: Colors.white,
+                  size: 18,
+                ),
+                onPressed: () {
+                  _showCalendarDialog(context);
+                },
+              ),
+            ),
           ],
+        ),
+      ),
+    );
+  }
+
+  void _showCalendarDialog(BuildContext context) {
+    DateTime _selectedDay = DateTime.now();
+    DateTime _focusedDay = DateTime.now();
+
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.black.withOpacity(0.9),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TableCalendar(
+                firstDay: DateTime.utc(2024, 1, 1),
+                lastDay: DateTime.utc(2025, 12, 31),
+                focusedDay: _focusedDay,
+                selectedDayPredicate: (day) {
+                  return isSameDay(_selectedDay, day);
+                },
+                onDaySelected: (selectedDay, focusedDay) {
+                  setState(() {
+                    _selectedDay = selectedDay;
+                    _focusedDay = focusedDay;
+                    currentDate =
+                        "${selectedDay.year}-${selectedDay.month.toString().padLeft(2, '0')}-${selectedDay.day.toString().padLeft(2, '0')}";
+                  });
+                  print('Selected date: $currentDate');
+                  Navigator.pop(context);
+                  _loadMenuData(); // Reload menu data for selected date
+                },
+                calendarStyle: CalendarStyle(
+                  selectedDecoration: BoxDecoration(
+                    color: Colors.yellow,
+                    shape: BoxShape.circle,
+                  ),
+                  todayDecoration: BoxDecoration(
+                    color: Colors.yellow.withOpacity(0.5),
+                    shape: BoxShape.circle,
+                  ),
+                  outsideDaysVisible: false,
+                  defaultTextStyle: const TextStyle(color: Colors.white),
+                  weekendTextStyle: const TextStyle(color: Colors.red),
+                  holidayTextStyle: const TextStyle(color: Colors.white),
+                  outsideTextStyle: const TextStyle(color: Colors.white70),
+                  disabledTextStyle: const TextStyle(color: Colors.white38),
+                ),
+                headerStyle: HeaderStyle(
+                  formatButtonVisible: false,
+                  titleCentered: true,
+                  titleTextStyle: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  leftChevronIcon:
+                      const Icon(Icons.chevron_left, color: Colors.white),
+                  rightChevronIcon:
+                      const Icon(Icons.chevron_right, color: Colors.white),
+                ),
+                calendarBuilders: CalendarBuilders(
+                  dowBuilder: (context, day) {
+                    if (day.weekday == DateTime.sunday) {
+                      return Center(
+                        child: Text(
+                          'S',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      );
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text(
+                  'Close',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -691,14 +1040,6 @@ class _MyHomePageState extends State<MyHomePage> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Text(value, style: const TextStyle(color: Colors.white)),
       ),
-    );
-  }
-
-  Widget _avatar(String assetPath) {
-    return CircleAvatar(
-      radius: 22,
-      backgroundColor: Colors.yellow,
-      child: CircleAvatar(backgroundImage: AssetImage(assetPath), radius: 20),
     );
   }
 
