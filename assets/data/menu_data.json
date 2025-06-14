@@ -1,0 +1,1024 @@
+{
+  "menu": {
+    "2025-05-01": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Poha, Bread Toast",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Jeera Rice, Chole, Chapati, Mixed Veg",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Samosa, Tea Cake",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Chana Masala, Jeera Rice",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-02": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Upma, Bread Toast",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Steamed Rice, Sambar, Rasam, Papad",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Samosa, Chutney",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Jeera Rice, Rajma, Mixed Veg Curry",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-03": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Poha, Bread Toast",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Veg Pulao, Raita, Papad",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Bread Pakora, Tea Cake",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Dal Fry, Mixed Veg, Jeera Rice",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-04": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Dosa, Sambar, Chutney",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Jeera Rice, Chole, Chapati, Mixed Veg",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Kachori, Jalebi",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Dal Makhani, Paneer Butter Masala",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-05": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Idli, Sambar, Chutney",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Jeera Rice, Chole, Chapati, Mixed Veg",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Samosa, Tea Cake",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Chana Masala, Jeera Rice",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-06": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Dosa, Sambar, Chutney",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Veg Pulao, Raita, Papad",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Kachori, Jalebi",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Dal Makhani, Paneer Butter Masala",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-07": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Idli, Sambar, Chutney",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Veg Pulao, Raita, Papad",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Samosa, Chutney",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Dal Fry, Mixed Veg, Jeera Rice",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-08": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Aloo Paratha, Curd",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Chapati, Paneer Butter Masala, Jeera Rice",
+        "beverages": "Water, Lassi",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Bread Pakora, Tea Cake",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Jeera Rice, Rajma, Mixed Veg Curry",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-09": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Upma, Bread Toast",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Steamed Rice, Sambar, Rasam, Papad",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Bread Pakora, Tea Cake",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Chole, Jeera Rice",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-10": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Aloo Paratha, Curd",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Veg Pulao, Raita, Papad",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Bread Pakora, Tea Cake",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Dal Makhani, Paneer Butter Masala",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-11": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Poha, Bread Toast",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Veg Biryani, Raita",
+        "beverages": "Water, Lassi",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Vada Pav, Chutney",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Jeera Rice, Rajma, Mixed Veg Curry",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-12": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Dosa, Sambar, Chutney",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Veg Pulao, Raita, Papad",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Kachori, Jalebi",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Chana Masala, Jeera Rice",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-13": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Idli, Sambar, Chutney",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Jeera Rice, Chole, Chapati, Mixed Veg",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Vada Pav, Chutney",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Jeera Rice, Rajma, Mixed Veg Curry",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-14": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Dosa, Sambar, Chutney",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Chapati, Paneer Butter Masala, Jeera Rice",
+        "beverages": "Water, Lassi",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Vada Pav, Chutney",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Chole, Jeera Rice",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-15": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Dosa, Sambar, Chutney",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Jeera Rice, Chole, Chapati, Mixed Veg",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Vada Pav, Chutney",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Dal Fry, Mixed Veg, Jeera Rice",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-16": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Upma, Bread Toast",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Veg Pulao, Raita, Papad",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Kachori, Jalebi",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Chana Masala, Jeera Rice",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-17": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Dosa, Sambar, Chutney",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Steamed Rice, Sambar, Rasam, Papad",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Samosa, Tea Cake",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Jeera Rice, Rajma, Mixed Veg Curry",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-18": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Idli, Sambar, Chutney",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Veg Pulao, Raita, Papad",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Samosa, Chutney",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Chole, Jeera Rice",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-19": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Poha, Bread Toast",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Veg Biryani, Raita",
+        "beverages": "Water, Lassi",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Samosa, Chutney",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Dal Fry, Mixed Veg, Jeera Rice",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-20": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Dosa, Sambar, Chutney",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Steamed Rice, Sambar, Rasam, Papad",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Samosa, Tea Cake",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Chole, Jeera Rice",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-21": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Upma, Bread Toast",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Veg Pulao, Raita, Papad",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Samosa, Tea Cake",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Dal Fry, Mixed Veg, Jeera Rice",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-22": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Upma, Bread Toast",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Veg Biryani, Raita",
+        "beverages": "Water, Lassi",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Kachori, Jalebi",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Chole, Jeera Rice",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-23": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Idli, Sambar, Chutney",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Jeera Rice, Chole, Chapati, Mixed Veg",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Bread Pakora, Tea Cake",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Chole, Jeera Rice",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-24": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Upma, Bread Toast",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Jeera Rice, Chole, Chapati, Mixed Veg",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Samosa, Chutney",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Dal Makhani, Paneer Butter Masala",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-25": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Idli, Sambar, Chutney",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Veg Pulao, Raita, Papad",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Bread Pakora, Tea Cake",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Jeera Rice, Rajma, Mixed Veg Curry",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-26": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Poha, Bread Toast",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Jeera Rice, Chole, Chapati, Mixed Veg",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Samosa, Chutney",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Chana Masala, Jeera Rice",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-27": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Idli, Sambar, Chutney",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Steamed Rice, Sambar, Rasam, Papad",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Samosa, Tea Cake",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Dal Makhani, Paneer Butter Masala",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-28": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Dosa, Sambar, Chutney",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Jeera Rice, Chole, Chapati, Mixed Veg",
+        "beverages": "Water, Buttermilk",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Samosa, Chutney",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Jeera Rice, Rajma, Mixed Veg Curry",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-29": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Idli, Sambar, Chutney",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Veg Biryani, Raita",
+        "beverages": "Water, Lassi",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Bread Pakora, Tea Cake",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Chana Masala, Jeera Rice",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    },
+    "2025-05-30": {
+      "breakfast": {
+        "title": "Breakfast",
+        "time": "7:00 AM - 9:30 AM",
+        "food": "Upma, Bread Toast",
+        "beverages": "Tea, Coffee",
+        "imagePath": "assets/breakfast.png",
+        "isFavorite": false
+      },
+      "lunch": {
+        "title": "Lunch",
+        "time": "12:30 PM - 2:30 PM",
+        "food": "Chapati, Paneer Butter Masala, Jeera Rice",
+        "beverages": "Water, Lassi",
+        "imagePath": "assets/lunch.png",
+        "isFavorite": false
+      },
+      "snacks": {
+        "title": "Snacks",
+        "time": "4:30 PM - 6:00 PM",
+        "food": "Bread Pakora, Tea Cake",
+        "beverages": "Tea",
+        "imagePath": "assets/snacks.png",
+        "isFavorite": false
+      },
+      "dinner": {
+        "title": "Dinner",
+        "time": "7:30 PM - 9:00 PM",
+        "food": "Chapati, Dal Fry, Mixed Veg, Jeera Rice",
+        "beverages": "Water",
+        "imagePath": "assets/dinner.png",
+        "isFavorite": false
+      }
+    }
+  }
+}
