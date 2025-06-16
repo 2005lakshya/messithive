@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'services/hive_service.dart';
+import 'services/menu_service.dart';
 import 'models/menu_card.dart';
+import 'models/menu_data.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'dart:convert';
@@ -43,7 +44,8 @@ class _MealTimeCardState extends State<MealTimeCard> {
   }
 
   Future<void> _loadFavoriteStatus() async {
-    final savedCard = HiveService.getMenuCard(widget.title);
+    final currentDate = DateTime.now().toString().split(' ')[0];
+    final savedCard = await MenuService.getMealData(currentDate, widget.title);
     if (savedCard != null) {
       setState(() {
         isFavorite = savedCard.isFavorite;
@@ -56,6 +58,7 @@ class _MealTimeCardState extends State<MealTimeCard> {
       isFavorite = !isFavorite;
     });
 
+    final currentDate = DateTime.now().toString().split(' ')[0];
     final menuCard = MenuCard(
       title: widget.title,
       time: widget.time,
@@ -66,7 +69,8 @@ class _MealTimeCardState extends State<MealTimeCard> {
     );
 
     if (isFavorite) {
-      await HiveService.saveMenuCard(menuCard);
+      await MenuService.updateFavoriteStatus(
+          currentDate, widget.title, isFavorite);
       // Show saved message
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -78,7 +82,8 @@ class _MealTimeCardState extends State<MealTimeCard> {
         );
       }
     } else {
-      await HiveService.deleteMenuCard(widget.title);
+      await MenuService.updateFavoriteStatus(
+          currentDate, widget.title, isFavorite);
       // Show deleted message
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -93,7 +98,7 @@ class _MealTimeCardState extends State<MealTimeCard> {
 
     // Print debug information
     print('Current saved menus:');
-    final allCards = HiveService.getAllMenuCards();
+    final allCards = await MenuService.getFavoriteMeals();
     for (var card in allCards) {
       print(
           '- ${card.title}: ${card.isFavorite ? 'Favorite' : 'Not Favorite'}');
@@ -201,8 +206,7 @@ class _MealTimeCardState extends State<MealTimeCard> {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -212,8 +216,14 @@ class _MyHomePageState extends State<MyHomePage> {
   String? selectedMessType = 'Special Mess';
   String? selectedMessType2 = 'Special Mess';
   final List<String> messTypes = ['Special Mess', 'Veg Mess', 'Non-Veg Mess'];
-  Map<String, dynamic>? menuData;
-  String currentDate = '2025-06-13'; // Default date
+  MenuData? _menuData;
+  String currentDate =
+      DateTime.now().toString().split(' ')[0]; // Default to today
+  String selectedHostel = 'Mens Hostel'; // Default hostel
+  String todayDate = DateTime.now().toString().split(' ')[0]; // Today's date
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
+  CalendarFormat _calendarFormat = CalendarFormat.week;
 
   @override
   void initState() {
@@ -223,146 +233,103 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _loadMenuData() async {
     try {
-      // First try to get from Hive
-      final storedData = await HiveService.get('menu_data');
-      if (storedData != null) {
+      print('Loading menu data for date: $currentDate');
+
+      final menuData = await MenuService.getMenuDataForDate(currentDate);
+      if (menuData != null) {
         setState(() {
-          menuData = Map<String, dynamic>.from(storedData);
+          _menuData = menuData;
         });
-        print('Loaded menu data from Hive storage');
-        print('Current date: $currentDate');
-        print('Available dates: ${menuData!.keys.toList()}');
-
-        // Verify we have data for the current date
-        if (!menuData!.containsKey(currentDate)) {
-          print('No menu data for current date, loading from JSON...');
-          await _loadFromJson();
+        print('Successfully loaded menu data: ${menuData.toString()}');
+      } else {
+        setState(() {
+          _menuData = null;
+        });
+        print('No menu data found for date: $currentDate');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Error loading menu data. Please restart the app.'),
+              duration: Duration(seconds: 2),
+            ),
+          );
         }
-        return;
       }
-
-      // If not in Hive, load from JSON
-      await _loadFromJson();
     } catch (e) {
-      print('Error in _loadMenuData: $e');
+      print('Error loading menu data: $e');
       setState(() {
-        menuData = null;
+        _menuData = null;
       });
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text(
-                'Error loading menu data. Please check storage and try again.'),
-            duration: Duration(seconds: 5),
+            content: Text('Error loading menu data. Please restart the app.'),
+            duration: Duration(seconds: 2),
           ),
         );
       }
     }
   }
 
-  Future<void> _loadFromJson() async {
+  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+    setState(() {
+      _selectedDay = selectedDay;
+      _focusedDay = focusedDay;
+      currentDate = selectedDay.toString().split(' ')[0];
+    });
+    _loadMenuData(); // Reload menu data for the selected date
+  }
+
+  // Get meal data for current date and meal type
+  MealData? getMealData(String mealType) {
+    if (_menuData == null) return null;
+
     try {
-      final String jsonString =
-          await rootBundle.loadString('assets/data/menu_data.json');
-      final Map<String, dynamic> data = json.decode(jsonString);
-      setState(() {
-        menuData = data['menu'];
-      });
-      // Store in Hive for future use
-      await HiveService.put('menu_data', data['menu']);
-      print('Loaded menu data from JSON and stored in Hive');
-      print('Current date: $currentDate');
-      print('Available dates: ${menuData!.keys.toList()}');
+      // For currently serving section, always use today's date
+      final dateToUse = mealType == getCurrentMeal() ? todayDate : currentDate;
+      return _menuData!.meals[mealType.toLowerCase()];
     } catch (e) {
-      print('Error loading JSON file: $e');
-      setState(() {
-        menuData = null;
-      });
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content:
-                Text('No mess menu available. Please add menu_data.json file.'),
-            duration: Duration(seconds: 5),
-          ),
-        );
-      }
+      print('Error getting meal data: $e');
+      return null;
     }
   }
 
-  // Define meal timings
-  final Map<String, Map<String, dynamic>> mealTimings = {
-    'Breakfast': {
-      'start': const TimeOfDay(hour: 7, minute: 30),
-      'end': const TimeOfDay(hour: 9, minute: 30),
-      'food': 'Paneer Puffs',
-      'beverages': 'Milk, Tea, Coffee',
-      'image': 'assets/breakfast.png',
-    },
-    'Lunch': {
-      'start': const TimeOfDay(hour: 12, minute: 30),
-      'end': const TimeOfDay(hour: 14, minute: 30),
-      'food': 'Paneer Puffs',
-      'beverages': 'Milk, Tea, Coffee',
-      'image': 'assets/lunch.png',
-    },
-    'Snacks': {
-      'start': const TimeOfDay(hour: 16, minute: 30),
-      'end': const TimeOfDay(hour: 18, minute: 00),
-      'food': 'Paneer Puffs',
-      'beverages': 'Milk, Tea, Coffee',
-      'image': 'assets/snacks.png',
-    },
-    'Dinner': {
-      'start': const TimeOfDay(hour: 19, minute: 30),
-      'end': const TimeOfDay(hour: 21, minute: 0),
-      'food': 'Paneer Puffs',
-      'beverages': 'Milk, Tea, Coffee',
-      'image': 'assets/dinner.png',
-    },
-  };
-
+  // Get current meal based on time
   String? getCurrentMeal() {
     final now = TimeOfDay.now();
-
-    for (var entry in mealTimings.entries) {
-      final start = entry.value['start'] as TimeOfDay;
-      final end = entry.value['end'] as TimeOfDay;
-
-      if (_isTimeBetween(now, start, end)) {
-        return entry.key;
-      }
-    }
+    if (now.hour >= 7 && now.hour < 9) return 'Breakfast';
+    if (now.hour >= 12 && now.hour < 14) return 'Lunch';
+    if (now.hour >= 16 && now.hour < 18) return 'Snacks';
+    if (now.hour >= 19 && now.hour < 21) return 'Dinner';
     return null;
   }
 
-  bool _isTimeBetween(TimeOfDay time, TimeOfDay start, TimeOfDay end) {
-    final now = time.hour * 60 + time.minute;
-    final startTime = start.hour * 60 + start.minute;
-    final endTime = end.hour * 60 + end.minute;
-
-    return now >= startTime && now <= endTime;
+  // Get time range for a meal
+  String getTimeRange(String mealType) {
+    switch (mealType) {
+      case 'Breakfast':
+        return '7:00 AM - 9:30 AM';
+      case 'Lunch':
+        return '12:30 PM - 2:30 PM';
+      case 'Snacks':
+        return '4:30 PM - 6:00 PM';
+      case 'Dinner':
+        return '7:30 PM - 9:00 PM';
+      default:
+        return '';
+    }
   }
 
-  String getTimeRange(String meal) {
-    final timing = mealTimings[meal];
-    if (timing == null) return '';
-
-    final start = timing['start'] as TimeOfDay;
-    final end = timing['end'] as TimeOfDay;
-
-    return '${_formatTimeOfDay(start)} to ${_formatTimeOfDay(end)}';
+  // Get greeting based on time of day
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) return 'Morning';
+    if (hour < 17) return 'Afternoon';
+    return 'Evening';
   }
 
-  String _formatTimeOfDay(TimeOfDay time) {
-    final hour = time.hour > 12 ? time.hour - 12 : time.hour;
-    final minute = time.minute.toString().padLeft(2, '0');
-    final period = time.hour >= 12 ? 'PM' : 'AM';
-    return '$hour:$minute $period';
-  }
-
-  void _checkSavedMenus() {
-    final allCards = HiveService.getAllMenuCards();
+  Future<void> _checkSavedMenus() async {
+    final allCards = await MenuService.getFavoriteMeals();
     if (allCards.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -402,6 +369,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final currentMeal = getCurrentMeal();
+    final currentMealData =
+        currentMeal != null ? getMealData(currentMeal) : null;
 
     return Scaffold(
       body: Stack(
@@ -468,54 +437,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                               PopupMenuItem<String>(
-                                value: 'favorite',
-                                child: Row(
-                                  children: const [
-                                    Icon(
-                                      Icons.favorite,
-                                      color: Colors.white,
-                                    ),
-                                    SizedBox(width: 10),
-                                    Text(
-                                      'Favorite',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              PopupMenuItem<String>(
-                                value: 'storage',
-                                child: Row(
-                                  children: const [
-                                    Icon(
-                                      Icons.storage,
-                                      color: Colors.white,
-                                    ),
-                                    SizedBox(width: 10),
-                                    Text(
-                                      'Show Storage Location',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              PopupMenuItem<String>(
-                                value: 'check_storage',
-                                child: Row(
-                                  children: const [
-                                    Icon(
-                                      Icons.folder_open,
-                                      color: Colors.white,
-                                    ),
-                                    SizedBox(width: 10),
-                                    Text(
-                                      'Check Storage Contents',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              PopupMenuItem<String>(
                                 value: 'view_menu_data',
                                 child: Row(
                                   children: const [
@@ -531,32 +452,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ],
                                 ),
                               ),
-                              PopupMenuItem<String>(
-                                value: 'test_monthly',
-                                child: Row(
-                                  children: [
-                                    const Icon(Icons.timer, color: Colors.blue),
-                                    const SizedBox(width: 8),
-                                    const Text('Test Monthly Operations'),
-                                  ],
-                                ),
-                              ),
-                              PopupMenuItem<String>(
-                                value: 'test_performance',
-                                child: Row(
-                                  children: [
-                                    const Icon(Icons.speed,
-                                        color: Colors.green),
-                                    const SizedBox(width: 8),
-                                    const Text('Test Data Fetch Performance'),
-                                  ],
-                                ),
-                              ),
                             ],
                             onSelected: (String value) async {
                               if (value == 'reset') {
                                 // Clear Hive storage
-                                await HiveService.clear();
+                                await MenuService.clear();
                                 if (mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
@@ -566,130 +466,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                   );
                                 }
-                              } else if (value == 'test_performance') {
-                                // Show loading dialog
-                                showDialog(
-                                  context: context,
-                                  barrierDismissible: false,
-                                  builder: (context) => const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                );
-
-                                // Run performance test
-                                await HiveService.testDataFetchPerformance();
-
-                                // Close loading dialog
-                                if (mounted) {
-                                  Navigator.pop(context);
-
-                                  // Show results dialog
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: const Text(
-                                          'Performance Test Results'),
-                                      content: SingleChildScrollView(
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: const [
-                                            Text(
-                                              'Check the console for detailed performance metrics.\n\n'
-                                              'The test measures:\n'
-                                              '1. Single menu card fetch time\n'
-                                              '2. All menu cards fetch time\n'
-                                              '3. Specific date menu fetch time\n'
-                                              '4. Monthly data fetch time\n'
-                                              '5. Complete fetch cycle time\n\n'
-                                              'Open the debug console to see the results.',
-                                              style: TextStyle(fontSize: 14),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                          child: const Text('Close'),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }
-                              } else if (value == 'favorite') {
-                                // Handle favorite option
-                              } else if (value == 'storage') {
-                                final appDir =
-                                    await getApplicationDocumentsDirectory();
-                                if (mounted) {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title:
-                                          const Text('Hive Storage Location'),
-                                      content: SingleChildScrollView(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            const Text(
-                                                'Your Hive database is stored at:'),
-                                            const SizedBox(height: 8),
-                                            SelectableText(
-                                              appDir.path,
-                                              style: const TextStyle(
-                                                color: Colors.blue,
-                                                decoration:
-                                                    TextDecoration.underline,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                          child: const Text('Close'),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }
-                              } else if (value == 'check_storage') {
-                                final location =
-                                    await HiveService.getStorageLocation();
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: const Text('Storage Location'),
-                                    content: Text(location),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: const Text('OK'),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                                HiveService.checkStorage();
                               } else if (value == 'view_menu_data') {
-                                _checkSavedMenus();
-                              } else if (value == 'test_monthly') {
-                                await HiveService.testMonthlyOperations();
-                                if (mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          'Monthly operations test completed. Check console for timing details.'),
-                                      duration: Duration(seconds: 3),
-                                    ),
-                                  );
-                                }
+                                await _checkSavedMenus();
                               }
                             },
                           ),
@@ -705,23 +483,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           // Avatars
                           Row(
                             children: [
-                              Container(
-                                width: 44,
-                                height: 44,
-                                decoration: BoxDecoration(
-                                  color: Colors.yellow,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Container(
-                                width: 44,
-                                height: 44,
-                                decoration: BoxDecoration(
-                                  color: Colors.yellow,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
+                              _buildHostelAvatar(),
                             ],
                           ),
                         ],
@@ -767,15 +529,13 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
 
                       // Current Meal Card
-                      if (currentMeal != null)
+                      if (currentMeal != null && currentMealData != null)
                         MealTimeCard(
-                          title: currentMeal,
-                          time: getTimeRange(currentMeal),
-                          food: mealTimings[currentMeal]!['food'] as String,
-                          beverages:
-                              mealTimings[currentMeal]!['beverages'] as String,
-                          imagePath:
-                              mealTimings[currentMeal]!['image'] as String,
+                          title: currentMealData.title,
+                          time: currentMealData.time,
+                          food: currentMealData.food,
+                          beverages: currentMealData.beverages,
+                          imagePath: currentMealData.imagePath,
                           imageWidth: currentMeal == 'Lunch' ? 120 : 150,
                           imageHeight: currentMeal == 'Lunch' ? 120 : 150,
                           bottomOffset: currentMeal == 'Dinner' ? -20 : 0,
@@ -788,30 +548,42 @@ class _MyHomePageState extends State<MyHomePage> {
                         "Today's Menu for ",
                       ),
 
-                      // Display selected date
+                      // Display selected date with calendar icon
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          'Menu for ${currentDate}',
-                          style: const TextStyle(
-                            color: Colors.white70,
-                            fontSize: 16,
-                          ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Menu for ${currentDate}',
+                              style: const TextStyle(
+                                color: Colors.white70,
+                                fontSize: 16,
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(
+                                Icons.calendar_today,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                              onPressed: () => _showCalendarDialog(context),
+                            ),
+                          ],
                         ),
                       ),
 
                       // Selected Date's Menu Cards
-                      if (menuData != null &&
-                          menuData!.containsKey(currentDate))
-                        ...menuData![currentDate].entries.map((entry) {
+                      if (_menuData != null)
+                        ..._menuData!.meals.entries.map((entry) {
                           final mealType = entry.key;
                           final mealData = entry.value;
                           return MealTimeCard(
-                            title: mealData['title'],
-                            time: mealData['time'],
-                            food: mealData['food'],
-                            beverages: mealData['beverages'],
-                            imagePath: mealData['imagePath'],
+                            title: mealData.title,
+                            time: mealData.time,
+                            food: mealData.food,
+                            beverages: mealData.beverages,
+                            imagePath: mealData.imagePath,
                             imageWidth: mealType == 'lunch' ? 120 : 150,
                             imageHeight: mealType == 'lunch' ? 120 : 150,
                             bottomOffset: mealType == 'dinner' ? -20 : 0,
@@ -839,14 +611,6 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
     );
-  }
-
-  String _getGreeting() {
-    final hour = TimeOfDay.now().hour;
-    if (hour < 12) return 'Morning';
-    if (hour < 17) return 'Afternoon';
-    if (hour < 21) return 'Evening';
-    return 'Night';
   }
 
   Widget _buildMessTypeDropdown(
@@ -935,8 +699,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _showCalendarDialog(BuildContext context) {
-    DateTime _selectedDay = DateTime.now();
-    DateTime _focusedDay = DateTime.now();
+    DateTime selectedDay = DateTime.parse(currentDate);
+    DateTime focusedDay = DateTime.parse(currentDate);
 
     showDialog(
       context: context,
@@ -953,71 +717,34 @@ class _MyHomePageState extends State<MyHomePage> {
               TableCalendar(
                 firstDay: DateTime.utc(2024, 1, 1),
                 lastDay: DateTime.utc(2025, 12, 31),
-                focusedDay: _focusedDay,
+                focusedDay: focusedDay,
                 selectedDayPredicate: (day) {
-                  return isSameDay(_selectedDay, day);
+                  return isSameDay(selectedDay, day);
                 },
-                onDaySelected: (selectedDay, focusedDay) {
+                onDaySelected: (newSelectedDay, newFocusedDay) {
+                  selectedDay = newSelectedDay;
+                  focusedDay = newFocusedDay;
+                  final formattedDate =
+                      "${selectedDay.year}-${selectedDay.month.toString().padLeft(2, '0')}-${selectedDay.day.toString().padLeft(2, '0')}";
+
                   setState(() {
+                    currentDate = formattedDate;
                     _selectedDay = selectedDay;
                     _focusedDay = focusedDay;
-                    currentDate =
-                        "${selectedDay.year}-${selectedDay.month.toString().padLeft(2, '0')}-${selectedDay.day.toString().padLeft(2, '0')}";
                   });
-                  print('Selected date: $currentDate');
-                  Navigator.pop(context);
-                  _loadMenuData(); // Reload menu data for selected date
+
+                  _loadMenuData(); // Reload menu data for the selected date
+                  Navigator.pop(context); // Close the dialog
                 },
-                calendarStyle: CalendarStyle(
-                  selectedDecoration: BoxDecoration(
-                    color: Colors.yellow,
-                    shape: BoxShape.circle,
-                  ),
-                  todayDecoration: BoxDecoration(
-                    color: Colors.yellow.withOpacity(0.5),
-                    shape: BoxShape.circle,
-                  ),
-                  outsideDaysVisible: false,
-                  defaultTextStyle: const TextStyle(color: Colors.white),
-                  weekendTextStyle: const TextStyle(color: Colors.red),
-                  holidayTextStyle: const TextStyle(color: Colors.white),
-                  outsideTextStyle: const TextStyle(color: Colors.white70),
-                  disabledTextStyle: const TextStyle(color: Colors.white38),
-                ),
-                headerStyle: HeaderStyle(
-                  formatButtonVisible: false,
-                  titleCentered: true,
-                  titleTextStyle: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  leftChevronIcon:
-                      const Icon(Icons.chevron_left, color: Colors.white),
-                  rightChevronIcon:
-                      const Icon(Icons.chevron_right, color: Colors.white),
-                ),
-                calendarBuilders: CalendarBuilders(
-                  dowBuilder: (context, day) {
-                    if (day.weekday == DateTime.sunday) {
-                      return Center(
-                        child: Text(
-                          'S',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      );
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text(
-                  'Close',
-                  style: TextStyle(color: Colors.white),
-                ),
+                calendarFormat: _calendarFormat,
+                onFormatChanged: (format) {
+                  setState(() {
+                    _calendarFormat = format;
+                  });
+                },
+                onPageChanged: (newFocusedDay) {
+                  focusedDay = newFocusedDay;
+                },
               ),
             ],
           ),
@@ -1050,6 +777,36 @@ class _MyHomePageState extends State<MyHomePage> {
       decoration: BoxDecoration(
         color: Colors.grey[300],
         borderRadius: BorderRadius.circular(4),
+      ),
+    );
+  }
+
+  Widget _buildHostelAvatar() {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedHostel =
+              selectedHostel == 'Mens Hostel' ? 'Ladies Hostel' : 'Mens Hostel';
+        });
+      },
+      child: Container(
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: Colors.yellow,
+            width: 2,
+          ),
+        ),
+        child: Image.asset(
+          selectedHostel == 'Mens Hostel'
+              ? 'assets/mens_hostel.png'
+              : 'assets/ladies_hostel.png',
+          width: 40,
+          height: 40,
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }

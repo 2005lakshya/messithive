@@ -40,6 +40,8 @@ flutter:
     - assets/messitbg.png
     - assets/data/
     - assets/data/menu_data.json
+    - assets/mens_hostel.png
+    - assets/ladies_hostel.png
 
 #  fonts:
 #    - family: PlusJakartaSans
